@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from torchvision import datasets
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -62,10 +63,11 @@ for epoch in range(EPOCH):
 
         d_real_loss = loss(D_result_real_data, y_real)
 
-        y_rand = (torch.rand(mini_batch, 1) * 10).type(torch.LongTensor).to(device)
+        z_ = torch.rand((batch, 100)).to(device)
+        y_rand = (torch.rand(batch, 1) * 10).type(torch.LongTensor).to(device)
         y_rand_ = getOneHot(y_rand).to(device)
 
-        G_result = G(z, y_rand_)
+        G_result = G(z_, y_rand_)
         D_result_fake_data = D(G_result, y_rand_)
 
         d_fake_loss = loss(D_result_fake_data, y_fake)
@@ -76,11 +78,11 @@ for epoch in range(EPOCH):
 
         # Train Generator
         g_optimizer.zero_grad()
-        z = torch.rand((batch, 100)).to(device)
-        y_rand = (torch.rand(mini_batch, 1) * 10).type(torch.LongTensor).to(device)
+        z_ = torch.rand((batch, 100)).to(device)
+        y_rand = (torch.rand(batch, 1) * 10).type(torch.LongTensor).to(device)
         y_rand_ = getOneHot(y_rand).to(device)
 
-        G_result = G(z, y_rand_)
+        G_result = G(z_, y_rand_)
 
         D_result_fake_data = D(G_result, y_rand_)
         g_loss = loss(D_result_fake_data, y_fake)

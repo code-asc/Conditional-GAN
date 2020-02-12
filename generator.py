@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as f
-import torch.cat as cat
+from torch import cat
 
 class Generator(nn.Module):
     def __init__(self):
